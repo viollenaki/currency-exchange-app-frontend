@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:currency_exchange_app/providers/auth_provider.dart';
@@ -19,7 +18,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()..loadTokenFromPrefs()),
-        // Можно добавить DataProvider для валют/операций
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -32,7 +30,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// SplashWrapper проверяет, загрузился ли токен, и решает, куда идти.
+
 class SplashWrapper extends StatelessWidget {
   const SplashWrapper({super.key});
 
