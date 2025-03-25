@@ -54,16 +54,20 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _screenFadeAnimation =
-        CurvedAnimation(parent: _screenFadeController, curve: Curves.easeIn);
+    _screenFadeAnimation = CurvedAnimation(
+      parent: _screenFadeController,
+      curve: Curves.easeIn,
+    );
     _screenFadeController.forward();
 
     _dataFadeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    _dataFadeAnimation =
-        CurvedAnimation(parent: _dataFadeController, curve: Curves.easeIn);
+    _dataFadeAnimation = CurvedAnimation(
+      parent: _dataFadeController,
+      curve: Curves.easeIn,
+    );
 
     _tableSlideController = AnimationController(
       vsync: this,
@@ -102,7 +106,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       return;
     }
 
-    const String baseUrl = 'https://exchanger-erbolsk.pythonanywhere.com';
+    const String baseUrl = 'http://192.168.212.129:8000';
     const String endpoint = '/api/analytics/';
     final Uri uri = Uri.parse('$baseUrl$endpoint?period=$_selectedPeriod');
 
@@ -157,10 +161,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
         appBar: AppBar(
           title: Text(
             'Аналитика',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           flexibleSpace: Container(
@@ -191,7 +192,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                   constraints: const BoxConstraints(maxWidth: 1000),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 16),
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                     child: Column(
                       children: [
                         _buildPeriodSelector(),
@@ -247,21 +250,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [primaryColor, accentColor],
-        ),
+        gradient: const LinearGradient(colors: [primaryColor, accentColor]),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'Период:',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-            ),
-          ),
+          Text('Период:', style: TextStyle(fontSize: 18, color: Colors.white)),
           const SizedBox(width: 16),
           DropdownButton<String>(
             value: _selectedPeriod,
@@ -271,10 +266,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                 value: period,
                 child: Text(
                   displayText,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: primaryColor,
-                  ),
+                  style: TextStyle(fontSize: 16, color: primaryColor),
                 ),
               );
             }).toList(),
@@ -282,10 +274,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
             underline: const SizedBox(),
             dropdownColor: Colors.white,
             iconEnabledColor: Colors.white,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-            ),
+            style: const TextStyle(fontSize: 16, color: Colors.white),
           ),
         ],
       ),
@@ -382,10 +371,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
         const SizedBox(width: 8),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.grey.shade800,
-          ),
+          style: TextStyle(fontSize: 18, color: Colors.grey.shade800),
         ),
       ],
     );
@@ -394,9 +380,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
   Widget _buildDetailsTable() {
     return Card(
       color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 8,
       shadowColor: primaryColor.withOpacity(0.3),
       child: Padding(
@@ -485,13 +469,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
 
   DataCell _buildDataCell(String value) {
     return DataCell(
-      Text(
-        value,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.black87,
-        ),
-      ),
+      Text(value, style: const TextStyle(fontSize: 16, color: Colors.black87)),
     );
   }
 

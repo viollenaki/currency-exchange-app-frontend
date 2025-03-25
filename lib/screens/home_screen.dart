@@ -331,8 +331,8 @@ class _OperationMainScreenState extends State<OperationMainScreen>
     }
 
     try {
-      final url = Uri.parse(
-          'http://exchanger-erbolsk.pythonanywhere.com/api/shifts/current_cashier/');
+      final url =
+          Uri.parse('http://192.168.212.129:8000/api/shifts/current_cashier/');
       final resp = await http.get(url, headers: headers);
 
       if (resp.statusCode == 200) {
@@ -369,8 +369,8 @@ class _OperationMainScreenState extends State<OperationMainScreen>
     }
 
     try {
-      final url = Uri.parse(
-          'http://exchanger-erbolsk.pythonanywhere.com/api/users/?role=cashier');
+      final url =
+          Uri.parse('http://192.168.212.129:8000/api/users/?role=cashier');
       final resp = await http.get(url, headers: headers);
       if (resp.statusCode == 200) {
         final data = jsonDecode(resp.body);
@@ -421,8 +421,8 @@ class _OperationMainScreenState extends State<OperationMainScreen>
       headers['Authorization'] = 'Bearer $token';
     }
     try {
-      final url = Uri.parse(
-          'http://exchanger-erbolsk.pythonanywhere.com/api/shifts/set_cashier/');
+      final url =
+          Uri.parse('http://192.168.212.129:8000/api/shifts/set_cashier/');
       final body = jsonEncode({"cashier_id": newId});
       final resp = await http.post(url, headers: headers, body: body);
       if (resp.statusCode == 200) {
@@ -457,8 +457,7 @@ class _OperationMainScreenState extends State<OperationMainScreen>
     try {
       final authProv = context.read<AuthProvider>();
       final response = await authProv.makeAuthenticatedRequest(
-        Uri.parse(
-            'http://exchanger-erbolsk.pythonanywhere.com/api/operations/currencies/'),
+        Uri.parse('http://192.168.212.129:8000/api/operations/currencies/'),
         'GET',
         context,
       );
@@ -918,8 +917,7 @@ class _OperationMainScreenState extends State<OperationMainScreen>
     final rate = double.tryParse(_rateCtrl.text) ?? 0;
 
     try {
-      final url = Uri.parse(
-          'http://exchanger-erbolsk.pythonanywhere.com/api/operations/');
+      final url = Uri.parse('http://192.168.212.129:8000/api/operations/');
       final headers = {'Content-Type': 'application/json'};
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';

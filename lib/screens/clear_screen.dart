@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../providers/auth_provider.dart';
 import 'login_screen.dart';
+
 class ClearShiftScreen extends StatefulWidget {
   const ClearShiftScreen({Key? key}) : super(key: key);
 
@@ -17,7 +18,6 @@ class _ClearShiftScreenState extends State<ClearShiftScreen>
   bool _isLoading = false;
   bool _isSubmitting = false;
   String? _errorMsg;
-
 
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
@@ -68,8 +68,7 @@ class _ClearShiftScreenState extends State<ClearShiftScreen>
       }
 
       final response = await http.get(
-        Uri.parse(
-            'https://exchanger-erbolsk.pythonanywhere.com/api/currencies/'),
+        Uri.parse('http://192.168.212.129:8000/api/currencies/'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -118,15 +117,11 @@ class _ClearShiftScreenState extends State<ClearShiftScreen>
       final changedBalances = _currencies.where((c) {
         return c['balance'] != c['original_balance'];
       }).map((c) {
-        return {
-          'currency_id': c['id'],
-          'leftover': c['balance'],
-        };
+        return {'currency_id': c['id'], 'leftover': c['balance']};
       }).toList();
 
       final response = await http.post(
-        Uri.parse(
-            'https://exchanger-erbolsk.pythonanywhere.com/api/shifts/clear/'),
+        Uri.parse('http://192.168.212.129:8000/api/shifts/clear/'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -280,9 +275,7 @@ class _ClearShiftScreenState extends State<ClearShiftScreen>
 
     return Card(
       elevation: 8,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -313,8 +306,10 @@ class _ClearShiftScreenState extends State<ClearShiftScreen>
               onPressed: _isSubmitting ? null : _clearShift,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red.shade700,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -338,7 +333,10 @@ class _ClearShiftScreenState extends State<ClearShiftScreen>
   }
 
   Widget _buildCurrencyItem(
-      Map<String, dynamic> currency, int index, Animation<double> animation) {
+    Map<String, dynamic> currency,
+    int index,
+    Animation<double> animation,
+  ) {
     return SizeTransition(
       sizeFactor: animation,
       child: FadeTransition(
@@ -362,8 +360,9 @@ class _ClearShiftScreenState extends State<ClearShiftScreen>
                 flex: 3,
                 child: TextFormField(
                   initialValue: currency['balance'].toString(),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   decoration: InputDecoration(
                     labelText: 'Balance',
                     labelStyle: const TextStyle(

@@ -1,0 +1,1 @@
+C:\Users\akbar\Desktop\currency-exchange-app-frontend\build\app\intermediates\cxx\Debug\394d1217\obj\x86_64

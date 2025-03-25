@@ -106,10 +106,7 @@ class _CassaScreenState extends State<CassaScreen>
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  _color1Animation.value!,
-                  _color2Animation.value!,
-                ],
+                colors: [_color1Animation.value!, _color2Animation.value!],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -126,7 +123,8 @@ class _CassaScreenState extends State<CassaScreen>
                   children: [
                     _isLoading
                         ? const Center(
-                            child: PulsatingLoader(color: Colors.blue))
+                            child: PulsatingLoader(color: Colors.blue),
+                          )
                         : _errorMsg != null
                             ? Center(
                                 child: Text(
@@ -157,13 +155,11 @@ class _CassaScreenState extends State<CassaScreen>
 
   Widget _buildCustomAppBar() {
     return AppBar(
-      backgroundColor: Colors.black, 
-      elevation: 0, 
+      backgroundColor: Colors.black,
+      elevation: 0,
       title: GradientText(
         'Касса',
-        gradient: const LinearGradient(
-          colors: [Colors.white, Colors.yellow],
-        ),
+        gradient: const LinearGradient(colors: [Colors.white, Colors.yellow]),
         style: const TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
@@ -208,9 +204,7 @@ class _CassaScreenState extends State<CassaScreen>
       child: Card(
         color: Colors.black.withOpacity(0.7),
         elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -228,8 +222,10 @@ class _CassaScreenState extends State<CassaScreen>
                     ),
                   ),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade700,
                       borderRadius: BorderRadius.circular(12),
@@ -265,7 +261,6 @@ class _CassaScreenState extends State<CassaScreen>
                 ],
               ),
               const SizedBox(height: 24),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -299,9 +294,7 @@ class _CassaScreenState extends State<CassaScreen>
       children: [
         GradientText(
           _formatCurrency(value),
-          gradient: LinearGradient(
-            colors: [color, color.withOpacity(0.7)],
-          ),
+          gradient: LinearGradient(colors: [color, color.withOpacity(0.7)]),
           style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -338,9 +331,7 @@ class _CassaScreenState extends State<CassaScreen>
       child: Card(
         color: Colors.grey.shade900.withOpacity(0.8),
         elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: DataTable(
@@ -381,13 +372,19 @@ class _CassaScreenState extends State<CassaScreen>
                     ),
                   ),
                   DataCell(Text(item['buy_count']?.toString() ?? '0')),
-                  DataCell(Text(
-                    (item['avg_buy_rate'] ?? 0).toDouble().toStringAsFixed(2),
-                  )),
+                  DataCell(
+                    Text(
+                      (item['avg_buy_rate'] ?? 0).toDouble().toStringAsFixed(2),
+                    ),
+                  ),
                   DataCell(Text(item['sell_count']?.toString() ?? '0')),
-                  DataCell(Text(
-                    (item['avg_sell_rate'] ?? 0).toDouble().toStringAsFixed(2),
-                  )),
+                  DataCell(
+                    Text(
+                      (item['avg_sell_rate'] ?? 0)
+                          .toDouble()
+                          .toStringAsFixed(2),
+                    ),
+                  ),
                   DataCell(
                     Text(
                       item['profit']?.toStringAsFixed(2) ?? '0.00',
@@ -425,7 +422,8 @@ class _CassaScreenState extends State<CassaScreen>
     try {
       final token = context.read<AuthProvider>().token;
       final url = Uri.parse(
-          'https://exchanger-erbolsk.pythonanywhere.com/api/analytics/?period=$_selectedPeriod');
+        'http://192.168.212.129:8000/api/analytics/?period=$_selectedPeriod',
+      );
       final headers = {
         'Content-Type': 'application/json',
         if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',

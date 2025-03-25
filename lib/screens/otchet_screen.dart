@@ -40,7 +40,7 @@ class _OtchetScreenState extends State<OtchetScreen> {
         label: 'Analytics',
         color: Colors.indigo,
         onTapLabel: 'Analytics',
-        onTapFunction: _gotoAnalytics, 
+        onTapFunction: _gotoAnalytics,
       ),
       _Section(
         icon: Icons.insights,
@@ -59,16 +59,16 @@ class _OtchetScreenState extends State<OtchetScreen> {
       _Section(
         icon: Icons.work_history,
         label: 'Shifts History',
-        color: const Color.fromARGB(255, 53, 155, 131), 
+        color: const Color.fromARGB(255, 53, 155, 131),
         onTapLabel: 'Shifts History',
-        onTapFunction: _gotoShiftsHistory, 
+        onTapFunction: _gotoShiftsHistory,
       ),
       _Section(
-        icon: Icons.storage, 
+        icon: Icons.storage,
         label: 'Internal History',
         color: Colors.purple,
         onTapLabel: 'Internal History',
-        onTapFunction: _gotoInternalHistory, 
+        onTapFunction: _gotoInternalHistory,
       ),
       _Section(
         icon: Icons.file_download,
@@ -79,8 +79,6 @@ class _OtchetScreenState extends State<OtchetScreen> {
       ),
     ];
   }
-
- 
 
   void _gotoAnalytics() {
     Navigator.push(
@@ -121,10 +119,7 @@ class _OtchetScreenState extends State<OtchetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Отчеты'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Отчеты'), centerTitle: true),
       body: Container(
         // Beautiful gradient background
         decoration: BoxDecoration(
@@ -132,7 +127,7 @@ class _OtchetScreenState extends State<OtchetScreen> {
             colors: [
               Colors.purpleAccent.shade100,
               Colors.pink.shade100,
-              Colors.orange.shade100
+              Colors.orange.shade100,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -172,7 +167,6 @@ class _OtchetScreenState extends State<OtchetScreen> {
               ),
         ),
         const SizedBox(height: 24),
-
         Wrap(
           spacing: 24,
           runSpacing: 24,
@@ -182,7 +176,6 @@ class _OtchetScreenState extends State<OtchetScreen> {
           }).toList(),
         ),
         const SizedBox(height: 32),
-
         if (_showExports) _buildExportsForm(),
       ],
     );
@@ -202,7 +195,7 @@ class _OtchetScreenState extends State<OtchetScreen> {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         width: 160,
-        height: 160, 
+        height: 160,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         decoration: BoxDecoration(
           color: section.color,
@@ -218,17 +211,13 @@ class _OtchetScreenState extends State<OtchetScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              section.icon,
-              size: 48,
-              color: Colors.white, 
-            ),
+            Icon(section.icon, size: 48, color: Colors.white),
             const SizedBox(height: 12),
             Text(
               section.label,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white, 
+                color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -261,7 +250,7 @@ class _OtchetScreenState extends State<OtchetScreen> {
                 const SizedBox(height: 24),
                 Center(
                   child: SizedBox(
-                    width: 200, 
+                    width: 200,
                     child: DropdownButtonFormField<String>(
                       decoration: const InputDecoration(
                         labelText: 'Что экспортируем',
@@ -273,36 +262,47 @@ class _OtchetScreenState extends State<OtchetScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                       ),
                       value: _selectedExportType,
-                      dropdownColor: Colors.black, 
+                      dropdownColor: Colors.black,
                       items: _exportTypes.map((type) {
                         switch (type) {
                           case 'operation_history':
                             return const DropdownMenuItem(
                               value: 'operation_history',
-                              child: Text('История Операций',
-                                  style: TextStyle(color: Colors.white)),
+                              child: Text(
+                                'История Операций',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             );
                           case 'event_history':
                             return const DropdownMenuItem(
                               value: 'event_history',
-                              child: Text('История Действий',
-                                  style: TextStyle(color: Colors.white)),
+                              child: Text(
+                                'История Действий',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             );
                           case 'analytics':
                             return const DropdownMenuItem(
                               value: 'analytics',
-                              child: Text('Аналитика',
-                                  style: TextStyle(color: Colors.white)),
+                              child: Text(
+                                'Аналитика',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             );
                           default:
                             return DropdownMenuItem(
-                                value: type,
-                                child: Text(type,
-                                    style: TextStyle(color: Colors.white)));
+                              value: type,
+                              child: Text(
+                                type,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
                         }
                       }).toList(),
                       onChanged: (val) {
@@ -310,7 +310,10 @@ class _OtchetScreenState extends State<OtchetScreen> {
                           setState(() => _selectedExportType = val);
                         }
                       },
-                      style: const TextStyle(fontSize: 14, color: Colors.white),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
                       iconEnabledColor: Colors.white,
                     ),
                   ),
@@ -330,43 +333,63 @@ class _OtchetScreenState extends State<OtchetScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                       ),
                       value: _selectedPeriod,
-                      dropdownColor: Colors.black, 
+                      dropdownColor: Colors.black,
                       items: _periods.map((p) {
                         switch (p) {
                           case '3days':
                             return const DropdownMenuItem(
-                                value: '3days',
-                                child: Text('3 дня',
-                                    style: TextStyle(color: Colors.white)));
+                              value: '3days',
+                              child: Text(
+                                '3 дня',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
                           case 'week':
                             return const DropdownMenuItem(
-                                value: 'week',
-                                child: Text('Неделя',
-                                    style: TextStyle(color: Colors.white)));
+                              value: 'week',
+                              child: Text(
+                                'Неделя',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
                           case 'month':
                             return const DropdownMenuItem(
-                                value: 'month',
-                                child: Text('Месяц',
-                                    style: TextStyle(color: Colors.white)));
+                              value: 'month',
+                              child: Text(
+                                'Месяц',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
                           case '3months':
                             return const DropdownMenuItem(
-                                value: '3months',
-                                child: Text('3 месяца',
-                                    style: TextStyle(color: Colors.white)));
+                              value: '3months',
+                              child: Text(
+                                '3 месяца',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
                           case 'shift':
                             return const DropdownMenuItem(
-                                value: 'shift',
-                                child: Text('Смена',
-                                    style: TextStyle(color: Colors.white)));
+                              value: 'shift',
+                              child: Text(
+                                'Смена',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
                           default:
                             return DropdownMenuItem(
-                                value: p,
-                                child: Text(p,
-                                    style: TextStyle(color: Colors.white)));
+                              value: p,
+                              child: Text(
+                                p,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
                         }
                       }).toList(),
                       onChanged: (val) {
@@ -374,7 +397,10 @@ class _OtchetScreenState extends State<OtchetScreen> {
                           setState(() => _selectedPeriod = val);
                         }
                       },
-                      style: const TextStyle(fontSize: 14, color: Colors.white),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
                       iconEnabledColor: Colors.white,
                     ),
                   ),
@@ -382,8 +408,8 @@ class _OtchetScreenState extends State<OtchetScreen> {
                 const SizedBox(height: 24),
                 Center(
                   child: SizedBox(
-                    width: 200, 
-                    height: 40, 
+                    width: 200,
+                    height: 40,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -418,7 +444,7 @@ class _OtchetScreenState extends State<OtchetScreen> {
       return;
     }
 
-    String url = 'https://exchanger-erbolsk.pythonanywhere.com';
+    String url = 'http://192.168.212.129:8000';
     final encodedToken = Uri.encodeComponent(token);
 
     switch (_selectedExportType) {
@@ -435,9 +461,9 @@ class _OtchetScreenState extends State<OtchetScreen> {
             '/api/analytics/export_excel/?period=$_selectedPeriod&download_token=$encodedToken';
         break;
       default:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Неверный тип экспорта')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Неверный тип экспорта')));
         return;
     }
 
@@ -445,9 +471,9 @@ class _OtchetScreenState extends State<OtchetScreen> {
 
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Не удалось открыть $uri')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Не удалось открыть $uri')));
     }
   }
 
@@ -461,9 +487,7 @@ class _OtchetScreenState extends State<OtchetScreen> {
   void _gotoAdvancedAnalytics() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const AdvancedAnalyticsScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const AdvancedAnalyticsScreen()),
     );
   }
 }

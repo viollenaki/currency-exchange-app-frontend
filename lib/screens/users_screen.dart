@@ -61,7 +61,10 @@ class _UsersScreenState extends State<UsersScreen>
         title: const Text(
           'User Management',
           style: TextStyle(
-              fontFamily: 'RobotoMono', fontSize: 20, color: Colors.white),
+            fontFamily: 'RobotoMono',
+            fontSize: 20,
+            color: Colors.white,
+          ),
         ),
         backgroundColor: Colors.blueAccent,
         elevation: 4,
@@ -80,11 +83,12 @@ class _UsersScreenState extends State<UsersScreen>
             opacity: _fadeAnimation,
             child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                    maxWidth: 800), 
+                constraints: const BoxConstraints(maxWidth: 800),
                 child: SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 16,
+                  ),
                   child: _buildMainContent(),
                 ),
               ),
@@ -93,7 +97,7 @@ class _UsersScreenState extends State<UsersScreen>
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green, 
+        backgroundColor: Colors.green,
         onPressed: _showAddUserDialog,
         child: const Icon(Icons.add, color: Colors.white),
         tooltip: 'Add User',
@@ -146,9 +150,7 @@ class _UsersScreenState extends State<UsersScreen>
     // Display the list of users with animation
     return Card(
       elevation: 8,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       color: Colors.white, // Light-colored card
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -256,8 +258,7 @@ class _UsersScreenState extends State<UsersScreen>
     });
     try {
       final token = context.read<AuthProvider>().token;
-      final url =
-          Uri.parse('https://exchanger-erbolsk.pythonanywhere.com/api/users/');
+      final url = Uri.parse('http://192.168.212.129:8000/api/users/');
       final headers = <String, String>{'Content-Type': 'application/json'};
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
@@ -380,7 +381,9 @@ class _UsersScreenState extends State<UsersScreen>
                     items: const [
                       DropdownMenuItem(value: 'admin', child: Text('Admin')),
                       DropdownMenuItem(
-                          value: 'cashier', child: Text('Cashier')),
+                        value: 'cashier',
+                        child: Text('Cashier'),
+                      ),
                     ],
                     onChanged: (val) => role = val ?? 'cashier',
                   ),
@@ -427,13 +430,12 @@ class _UsersScreenState extends State<UsersScreen>
   ) async {
     if (!formKey.currentState!.validate()) return;
 
-    Navigator.of(dialogCtx).pop(); 
+    Navigator.of(dialogCtx).pop();
     try {
       setState(() => _isLoading = true);
 
       final token = context.read<AuthProvider>().token;
-      final url =
-          Uri.parse('https://exchanger-erbolsk.pythonanywhere.com/api/users/');
+      final url = Uri.parse('http://192.168.212.129:8000/api/users/');
       final headers = <String, String>{'Content-Type': 'application/json'};
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
@@ -452,7 +454,7 @@ class _UsersScreenState extends State<UsersScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('User added successfully!')),
         );
-        _fetchUsers(); 
+        _fetchUsers();
       } else {
         setState(() {
           _errorMsg = 'Failed to add user: ${resp.statusCode}';
@@ -515,7 +517,9 @@ class _UsersScreenState extends State<UsersScreen>
                     items: const [
                       DropdownMenuItem(value: 'admin', child: Text('Admin')),
                       DropdownMenuItem(
-                          value: 'cashier', child: Text('Cashier')),
+                        value: 'cashier',
+                        child: Text('Cashier'),
+                      ),
                     ],
                     onChanged: (val) => role = val ?? 'cashier',
                   ),
@@ -568,8 +572,7 @@ class _UsersScreenState extends State<UsersScreen>
       setState(() => _isLoading = true);
 
       final token = context.read<AuthProvider>().token;
-      final url = Uri.parse(
-          'https://exchanger-erbolsk.pythonanywhere.com/api/users/$userId/');
+      final url = Uri.parse('http://192.168.212.129:8000/api/users/$userId/');
       final headers = <String, String>{'Content-Type': 'application/json'};
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
@@ -586,7 +589,7 @@ class _UsersScreenState extends State<UsersScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('User updated successfully!')),
         );
-        _fetchUsers(); 
+        _fetchUsers();
       } else {
         setState(() {
           _errorMsg = 'Failed to update user: ${resp.statusCode}';
@@ -648,8 +651,7 @@ class _UsersScreenState extends State<UsersScreen>
       setState(() => _isLoading = true);
 
       final token = context.read<AuthProvider>().token;
-      final url = Uri.parse(
-          'https://exchanger-erbolsk.pythonanywhere.com/api/users/$userId/');
+      final url = Uri.parse('http://192.168.212.129:8000/api/users/$userId/');
       final headers = <String, String>{'Content-Type': 'application/json'};
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
@@ -660,7 +662,7 @@ class _UsersScreenState extends State<UsersScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('User deleted successfully!')),
         );
-        _fetchUsers(); 
+        _fetchUsers();
       } else {
         setState(() {
           _errorMsg = 'Failed to delete user: ${resp.statusCode}';

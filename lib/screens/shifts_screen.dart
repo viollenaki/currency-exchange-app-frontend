@@ -19,7 +19,6 @@ class ShiftHistoryScreen extends StatefulWidget {
 
 class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
     with SingleTickerProviderStateMixin {
-      
   List<dynamic> _shifts = [];
   bool _isLoading = false;
   String? _errorMsg;
@@ -31,12 +30,12 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
 
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
-  final Color primaryColor = const Color(0xFF4A90E2); 
-  final Color secondaryColor = const Color(0xFF50E3C2); 
+  final Color primaryColor = const Color(0xFF4A90E2);
+  final Color secondaryColor = const Color(0xFF50E3C2);
   final Color backgroundColor = const Color(0xFFF5F5F5);
-  final Color cardColor = Colors.white; 
-  final Color textColor = Colors.black87; 
-  final Color accentColor = const Color(0xFF4A90E2); 
+  final Color cardColor = Colors.white;
+  final Color textColor = Colors.black87;
+  final Color accentColor = const Color(0xFF4A90E2);
 
   @override
   void initState() {
@@ -59,7 +58,8 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
 
     final token = context.read<AuthProvider>().token;
     final url = Uri.parse(
-        'https://exchanger-erbolsk.pythonanywhere.com/api/shifts/history/?page=$page');
+      'http://192.168.212.129:8000/api/shifts/history/?page=$page',
+    );
     final headers = {
       'Content-Type': 'application/json',
       if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
@@ -136,11 +136,10 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
             children: [
               TextField(
                 controller: profitController,
-                decoration: const InputDecoration(
-                  labelText: 'Profit',
+                decoration: const InputDecoration(labelText: 'Profit'),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
               ),
             ],
           ),
@@ -149,16 +148,11 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
               onPressed: () => Navigator.of(ctx).pop(),
               child: Text(
                 'Cancel',
-                style: TextStyle(
-                  color: primaryColor,
-                  fontFamily: 'Roboto',
-                ),
+                style: TextStyle(color: primaryColor, fontFamily: 'Roboto'),
               ),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
               onPressed: () {
                 final newProfit = double.tryParse(profitController.text);
                 if (newProfit != null) {
@@ -174,10 +168,7 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
               },
               child: const Text(
                 'Save',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Roboto',
-                ),
+                style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
               ),
             ),
           ],
@@ -189,22 +180,20 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
   Future<void> _editShift(int shiftId, double newProfit) async {
     final token = context.read<AuthProvider>().token;
     if (token == null || token.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Not authenticated!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Not authenticated!')));
       return;
     }
 
     final editUrl = Uri.parse(
-      'https://exchanger-erbolsk.pythonanywhere.com/api/shifts/$shiftId/edit/',
+      'http://192.168.212.129:8000/api/shifts/$shiftId/edit/',
     );
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
     };
-    final body = jsonEncode({
-      'overall_profit': newProfit,
-    });
+    final body = jsonEncode({'overall_profit': newProfit});
 
     try {
       final response = await http.patch(editUrl, headers: headers, body: body);
@@ -214,14 +203,14 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
         );
         _fetchShifts(page: _currentPage);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Edit error: ${response.body}')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Edit error: ${response.body}')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Edit exception: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Edit exception: $e')));
     }
   }
 
@@ -252,7 +241,7 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white, 
+            color: Colors.white,
             fontFamily: 'Roboto',
           ),
         ),
@@ -270,11 +259,7 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
       backgroundColor: backgroundColor,
       body: SafeArea(
         child: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(
-                  color: primaryColor,
-                ),
-              )
+            ? Center(child: CircularProgressIndicator(color: primaryColor))
             : _errorMsg != null
                 ? Center(
                     child: Padding(
@@ -298,8 +283,11 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
                           child: AnimatedList(
                             key: _listKey,
                             initialItemCount: 0,
-                            itemBuilder:
-                                (context, index, Animation<double> animation) {
+                            itemBuilder: (
+                              context,
+                              index,
+                              Animation<double> animation,
+                            ) {
                               final shift = _shifts[index];
                               return FadeTransition(
                                 opacity: animation,
@@ -333,10 +321,10 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
     final endTime = shift['end_time'] ?? 'N/A';
     final cashier = shift['cashier_name'] ?? 'N/A';
     final opsCount = shift['operations_count']?.toString() ?? '0';
-    final profit =
-        double.tryParse(shift['overall_profit']?.toString() ?? '0.00')
-                ?.toStringAsFixed(2) ??
-            '0.00';
+    final profit = double.tryParse(
+          shift['overall_profit']?.toString() ?? '0.00',
+        )?.toStringAsFixed(2) ??
+        '0.00';
     final changed = shift['changed_balances'] ?? [];
 
     final changedBalancesText = (changed is List && changed.isNotEmpty)
@@ -350,17 +338,14 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
 
     return Center(
       child: SizedBox(
-        width: 300, 
+        width: 300,
         child: Card(
           color: cardColor,
           elevation: 3,
           shadowColor: primaryColor.withOpacity(0.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: BorderSide(
-              color: secondaryColor,
-              width: 1,
-            ),
+            side: BorderSide(color: secondaryColor, width: 1),
           ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
@@ -385,7 +370,9 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
                         borderRadius: BorderRadius.circular(6),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       child: Text(
                         'PROFIT: \$${profit}',
                         style: TextStyle(
@@ -449,7 +436,9 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 6.0),
+                    horizontal: 8.0,
+                    vertical: 6.0,
+                  ),
                   decoration: BoxDecoration(
                     color: secondaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -487,10 +476,7 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             label: const Text(
               'Предыдущая',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Roboto',
-              ),
+              style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
             ),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
@@ -522,10 +508,7 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen>
             icon: const Icon(Icons.arrow_forward, color: Colors.white),
             label: const Text(
               'Следующая',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Roboto',
-              ),
+              style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
             ),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
@@ -561,9 +544,9 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
   late Uint8List _pdfBytes;
   bool _isSaving = false;
 
-  final Color primaryColor = const Color(0xFF4A90E2); 
-  final Color secondaryColor = const Color(0xFF50E3C2); 
-  final Color backgroundColor = const Color(0xFFF5F5F5); 
+  final Color primaryColor = const Color(0xFF4A90E2);
+  final Color secondaryColor = const Color(0xFF50E3C2);
+  final Color backgroundColor = const Color(0xFFF5F5F5);
 
   @override
   void initState() {
@@ -581,13 +564,13 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
       final filePath = '${directory.path}/${widget.filename}';
       final file = File(filePath);
       await file.writeAsBytes(_pdfBytes);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Saved to: $filePath')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Saved to: $filePath')));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Save failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Save failed: $e')));
     } finally {
       setState(() {
         _isSaving = false;
@@ -606,7 +589,9 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
         title: Text(
           widget.filename,
           style: const TextStyle(
-              fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Roboto',
+          ),
         ),
         centerTitle: true,
         backgroundColor: primaryColor,
@@ -648,10 +633,7 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
                   icon: const Icon(Icons.exit_to_app, color: Colors.white),
                   label: const Text(
                     'Exit',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Roboto',
-                    ),
+                    style: TextStyle(color: Colors.white, fontFamily: 'Roboto'),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
@@ -659,7 +641,9 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     elevation: 3,
                   ),
                 ),
@@ -671,8 +655,9 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
                           ),
                         )
                       : const Icon(Icons.download, color: Colors.white),
@@ -697,7 +682,9 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     elevation: 3,
                   ),
                 ),

@@ -57,7 +57,7 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
 
     final token = context.read<AuthProvider>().token;
     final url = Uri.parse(
-      'https://exchanger-erbolsk.pythonanywhere.com/api/internal-history/?page=$page',
+      'http://192.168.212.129:8000/api/internal-history/?page=$page',
     );
     final headers = {
       'Content-Type': 'application/json',
@@ -126,20 +126,13 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Colors.purple.shade50,
-              Colors.blue.shade50,
-            ],
+            colors: [Colors.purple.shade50, Colors.blue.shade50],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
         child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                ),
-              )
+            ? const Center(child: CircularProgressIndicator(strokeWidth: 3))
             : _errorMsg != null
                 ? Center(
                     child: Text(
@@ -156,7 +149,8 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 32.0),
+                                  horizontal: 32.0,
+                                ),
                                 child: AnimatedSwitcher(
                                   duration: const Duration(milliseconds: 500),
                                   transitionBuilder: (child, animation) {
@@ -166,7 +160,8 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
                                     );
                                   },
                                   child: _buildDataTable(
-                                      key: ValueKey(_histories)),
+                                    key: ValueKey(_histories),
+                                  ),
                                 ),
                               ),
                             ),
@@ -181,7 +176,8 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
+                                  horizontal: 16.0,
+                                ),
                                 child: AnimatedSwitcher(
                                   duration: const Duration(milliseconds: 500),
                                   transitionBuilder: (child, animation) {
@@ -191,7 +187,8 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
                                     );
                                   },
                                   child: _buildScrollableCards(
-                                      key: ValueKey(_histories)),
+                                    key: ValueKey(_histories),
+                                  ),
                                 ),
                               ),
                             ),
@@ -214,78 +211,103 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
         scrollDirection: Axis.horizontal,
         child: DataTable(
           headingRowColor: MaterialStateColor.resolveWith(
-              (states) => Colors.purple.shade700),
+            (states) => Colors.purple.shade700,
+          ),
           columns: const [
             DataColumn(
               label: Text(
                 'Event ID',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             DataColumn(
               label: Text(
                 'Event Type',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             DataColumn(
               label: Text(
                 'Cashier',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             DataColumn(
               label: Text(
                 'Target User',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             DataColumn(
               label: Text(
                 'Currency',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             DataColumn(
               label: Text(
                 'Time',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
           rows: _histories.map((history) {
             return DataRow(
               cells: [
-                DataCell(Text(
-                  '${history["id"]}',
-                  style: const TextStyle(color: Colors.black87),
-                )),
-                DataCell(Text(
-                  '${history["event_type"] ?? "N/A"}',
-                  style: const TextStyle(color: Colors.black87),
-                )),
-                DataCell(Text(
-                  '${history["user"] ?? "N/A"}',
-                  style: const TextStyle(color: Colors.black87),
-                )),
-                DataCell(Text(
-                  '${history["target_user"] ?? "N/A"}',
-                  style: const TextStyle(color: Colors.black87),
-                )),
-                DataCell(Text(
-                  '${history["currency"] ?? "N/A"}',
-                  style: const TextStyle(color: Colors.black87),
-                )),
-                DataCell(Text(
-                  _formatTimestamp('${history["timestamp"] ?? "N/A"}'),
-                  style: const TextStyle(color: Colors.black87),
-                )),
+                DataCell(
+                  Text(
+                    '${history["id"]}',
+                    style: const TextStyle(color: Colors.black87),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    '${history["event_type"] ?? "N/A"}',
+                    style: const TextStyle(color: Colors.black87),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    '${history["user"] ?? "N/A"}',
+                    style: const TextStyle(color: Colors.black87),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    '${history["target_user"] ?? "N/A"}',
+                    style: const TextStyle(color: Colors.black87),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    '${history["currency"] ?? "N/A"}',
+                    style: const TextStyle(color: Colors.black87),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    _formatTimestamp('${history["timestamp"] ?? "N/A"}'),
+                    style: const TextStyle(color: Colors.black87),
+                  ),
+                ),
               ],
             );
           }).toList(),
@@ -312,8 +334,7 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {
-        },
+        onTap: () {},
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -329,10 +350,7 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
                 offset: const Offset(6, 6),
               ),
             ],
-            border: Border.all(
-              color: Colors.purple.shade200,
-              width: 1,
-            ),
+            border: Border.all(color: Colors.purple.shade200, width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,9 +361,10 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
                   Text(
                     'ID: ${history["id"]}',
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.purple),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.purple,
+                    ),
                   ),
                   Chip(
                     label: Text(
@@ -383,8 +402,10 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple.shade700,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -394,10 +415,7 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
                     _showDetailsDialog(history);
                   },
                   icon: const Icon(Icons.info_outline, size: 20),
-                  label: const Text(
-                    'Details',
-                    style: TextStyle(fontSize: 16),
-                  ),
+                  label: const Text('Details', style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],
@@ -423,7 +441,8 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
                   Text('Target User: ${history["target_user"] ?? "N/A"}'),
                   Text('Currency: ${history["currency"] ?? "N/A"}'),
                   Text(
-                      'Time: ${_formatTimestamp('${history["timestamp"] ?? "N/A"}')}'),
+                    'Time: ${_formatTimestamp('${history["timestamp"] ?? "N/A"}')}',
+                  ),
                 ],
               ),
             ),
@@ -452,15 +471,15 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
   Future<void> _fetchAndShowReceipt(Map<String, dynamic> operation) async {
     final token = context.read<AuthProvider>().token;
     if (token == null || token.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Not authenticated!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Not authenticated!')));
       return;
     }
 
     final opId = operation['id'];
     final url = Uri.parse(
-      'https://exchanger-erbolsk.pythonanywhere.com/api/operations/$opId/generate_receipt_inline/',
+      'http://192.168.212.129:8000/api/operations/$opId/generate_receipt_inline/',
     );
     final headers = {
       'Content-Type': 'application/json',
@@ -477,8 +496,10 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) =>
-                  ReceiptViewerScreen(pdfBase64: pdfBase64, filename: filename),
+              builder: (_) => ReceiptViewerScreen(
+                pdfBase64: pdfBase64,
+                filename: filename,
+              ),
             ),
           );
         }
@@ -488,11 +509,12 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Receipt exception: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Receipt exception: $e')));
     }
   }
+
   Widget _buildPaginationRow() {
     return Container(
       color: Colors.purple.shade50,
@@ -515,18 +537,16 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
               ),
               elevation: 5,
             ),
-            child: const Text(
-              'Previous',
-              style: TextStyle(fontSize: 16),
-            ),
+            child: const Text('Previous', style: TextStyle(fontSize: 16)),
           ),
           const SizedBox(width: 30),
           Text(
             'Page $_currentPage',
             style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
           const SizedBox(width: 30),
           ElevatedButton(
@@ -544,10 +564,7 @@ class _InternalHistoryScreenState extends State<InternalHistoryScreen>
               ),
               elevation: 5,
             ),
-            child: const Text(
-              'Next',
-              style: TextStyle(fontSize: 16),
-            ),
+            child: const Text('Next', style: TextStyle(fontSize: 16)),
           ),
         ],
       ),

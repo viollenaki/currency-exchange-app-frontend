@@ -72,10 +72,7 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
       begin: const Offset(0, 0.1),
       end: Offset.zero,
     ).animate(
-      CurvedAnimation(
-        parent: _tableSlideController,
-        curve: Curves.easeInOut,
-      ),
+      CurvedAnimation(parent: _tableSlideController, curve: Curves.easeInOut),
     );
 
     _miniTablesFadeController = AnimationController(
@@ -116,7 +113,8 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
       }
 
       final url = Uri.parse(
-          'https://exchanger-erbolsk.pythonanywhere.com/api/analytics/advanced/?period=$_selectedPeriod');
+        'http://192.168.212.129:8000/api/analytics/advanced/?period=$_selectedPeriod',
+      );
 
       final response = await http.get(
         url,
@@ -167,16 +165,18 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
   List<CurrencyDetail> get top2MostPopular {
     if (_analyticsData == null) return [];
     final sorted = [..._analyticsData!.details];
-    sorted.sort((a, b) =>
-        (b.buyCount + b.sellCount).compareTo(a.buyCount + a.sellCount));
+    sorted.sort(
+      (a, b) => (b.buyCount + b.sellCount).compareTo(a.buyCount + a.sellCount),
+    );
     return sorted.take(2).toList();
   }
 
   List<CurrencyDetail> get top2LeastPopular {
     if (_analyticsData == null) return [];
     final sorted = [..._analyticsData!.details];
-    sorted.sort((a, b) =>
-        (a.buyCount + a.sellCount).compareTo(b.buyCount + b.sellCount));
+    sorted.sort(
+      (a, b) => (a.buyCount + a.sellCount).compareTo(b.buyCount + b.sellCount),
+    );
     return sorted.take(2).toList();
   }
 
@@ -187,8 +187,9 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
         child: Card(
           color: color,
           elevation: 4,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             padding: const EdgeInsets.all(16.0),
             height: 120,
@@ -268,8 +269,10 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
                   itemBuilder: (context, index) {
                     final peak = peakHours[index];
                     return ListTile(
-                      leading:
-                          const Icon(Icons.schedule, color: Colors.deepPurple),
+                      leading: const Icon(
+                        Icons.schedule,
+                        color: Colors.deepPurple,
+                      ),
                       title: Text(
                         peak.hour,
                         style: GoogleFonts.roboto(
@@ -359,10 +362,7 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
           child: DropdownButton<String>(
             value: _selectedPeriod,
             underline: const SizedBox(),
-            style: GoogleFonts.roboto(
-              fontSize: 16,
-              color: Colors.black87,
-            ),
+            style: GoogleFonts.roboto(fontSize: 16, color: Colors.black87),
             dropdownColor: Colors.white,
             iconEnabledColor: primaryBlue,
             onChanged: (val) {
@@ -409,8 +409,11 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
     );
   }
 
-  Widget _buildMiniTable(String title, List<CurrencyDetail> details,
-      {bool isPopularity = false}) {
+  Widget _buildMiniTable(
+    String title,
+    List<CurrencyDetail> details, {
+    bool isPopularity = false,
+  }) {
     return FadeTransition(
       opacity: _miniTablesFadeAnimation,
       child: Card(
@@ -494,11 +497,17 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
             const SizedBox(width: 16),
             _buildMiniTable("2 наименее прибыльных", top2LeastProfitable),
             const SizedBox(width: 16),
-            _buildMiniTable("2 самых популярных", top2MostPopular,
-                isPopularity: true),
+            _buildMiniTable(
+              "2 самых популярных",
+              top2MostPopular,
+              isPopularity: true,
+            ),
             const SizedBox(width: 16),
-            _buildMiniTable("2 наименее популярных", top2LeastPopular,
-                isPopularity: true),
+            _buildMiniTable(
+              "2 наименее популярных",
+              top2LeastPopular,
+              isPopularity: true,
+            ),
           ],
         ),
       ),
@@ -576,34 +585,61 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
                 detail.profit >= 0 ? Colors.green.shade50 : Colors.red.shade50,
           ),
           cells: [
-            DataCell(Text(
-              detail.currency,
-              style: GoogleFonts.roboto(fontSize: 14, color: Colors.black87),
-            )),
-            DataCell(Text(
-              detail.buyCount.toStringAsFixed(0),
-              style: GoogleFonts.roboto(fontSize: 14, color: Colors.black87),
-            )),
-            DataCell(Text(
-              detail.sellCount.toStringAsFixed(0),
-              style: GoogleFonts.roboto(fontSize: 14, color: Colors.black87),
-            )),
-            DataCell(Text(
-              detail.avgBuyRate.toStringAsFixed(4),
-              style: GoogleFonts.roboto(fontSize: 14, color: Colors.black87),
-            )),
-            DataCell(Text(
-              detail.avgSellRate.toStringAsFixed(4),
-              style: GoogleFonts.roboto(fontSize: 14, color: Colors.black87),
-            )),
-            DataCell(Text(
-              "${detail.profit.toStringAsFixed(2)} Сом",
-              style: TextStyle(
-                fontSize: 14,
-                color: detail.profit >= 0 ? accentGreen : accentRed,
-                fontWeight: FontWeight.bold,
+            DataCell(
+              Text(
+                detail.currency,
+                style: GoogleFonts.roboto(
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
               ),
-            )),
+            ),
+            DataCell(
+              Text(
+                detail.buyCount.toStringAsFixed(0),
+                style: GoogleFonts.roboto(
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            DataCell(
+              Text(
+                detail.sellCount.toStringAsFixed(0),
+                style: GoogleFonts.roboto(
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            DataCell(
+              Text(
+                detail.avgBuyRate.toStringAsFixed(4),
+                style: GoogleFonts.roboto(
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            DataCell(
+              Text(
+                detail.avgSellRate.toStringAsFixed(4),
+                style: GoogleFonts.roboto(
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            DataCell(
+              Text(
+                "${detail.profit.toStringAsFixed(2)} Сом",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: detail.profit >= 0 ? accentGreen : accentRed,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ],
         );
       }).toList(),
@@ -635,11 +671,7 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
             children: [
               Row(
                 children: [
-                  const Icon(
-                    Icons.table_chart,
-                    color: primaryBlue,
-                    size: 30,
-                  ),
+                  const Icon(Icons.table_chart, color: primaryBlue, size: 30),
                   const SizedBox(width: 10),
                   Text(
                     'Полная информация по валютам',
@@ -703,10 +735,7 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  primaryBlue,
-                  primaryRed,
-                ],
+                colors: [primaryBlue, primaryRed],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -720,19 +749,14 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                Colors.deepPurple.shade100,
-                Colors.blue.shade100,
-              ],
+              colors: [Colors.deepPurple.shade100, Colors.blue.shade100],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
           child: _isLoading
               ? const Center(
-                  child: CircularProgressIndicator(
-                    color: primaryBlue,
-                  ),
+                  child: CircularProgressIndicator(color: primaryBlue),
                 )
               : _errorMsg != null
                   ? _buildError()
@@ -764,11 +788,7 @@ class _AdvancedAnalyticsScreenState extends State<AdvancedAnalyticsScreen>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 28,
-            ),
+            const Icon(Icons.error_outline, color: Colors.red, size: 28),
             const SizedBox(width: 12),
             Flexible(
               child: Text(
@@ -849,10 +869,7 @@ class PeakHour {
   final String hour;
   final int operationCount;
 
-  PeakHour({
-    required this.hour,
-    required this.operationCount,
-  });
+  PeakHour({required this.hour, required this.operationCount});
 
   factory PeakHour.fromJson(Map<String, dynamic> json) {
     return PeakHour(

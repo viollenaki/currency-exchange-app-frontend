@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  static const baseUrl =
-      'https://exchanger-erbolsk.pythonanywhere.com'; // Ваш бэкенд
+  static const baseUrl = 'http://192.168.212.129:8000'; // Ваш бэкенд
 
   static Future<String> login(String username, String password) async {
     final url = Uri.parse('$baseUrl/api/token/');

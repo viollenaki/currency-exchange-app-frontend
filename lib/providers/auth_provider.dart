@@ -5,7 +5,7 @@ import 'dart:convert';
 
 class AuthProvider with ChangeNotifier {
   String? _token;
-  String? _userName; 
+  String? _userName;
   bool _isLoadingPrefs = true;
 
   bool get isLoadingPrefs => _isLoadingPrefs;
@@ -17,7 +17,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> loadTokenFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('authToken');
-    _userName = prefs.getString('userName'); 
+    _userName = prefs.getString('userName');
     _isLoadingPrefs = false;
     notifyListeners();
   }
@@ -38,12 +38,11 @@ class AuthProvider with ChangeNotifier {
     await prefs.remove('authToken');
     await prefs.remove('userName');
     notifyListeners();
-    Navigator.of(context).pushReplacementNamed('/login'); 
+    Navigator.of(context).pushReplacementNamed('/login');
   }
 
   Future<void> login(String username, String password) async {
-    final url = Uri.parse(
-        'https://exchanger-erbolsk.pythonanywhere.com/api/token/'); 
+    final url = Uri.parse('http://192.168.212.129:8000/api/token/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({'username': username, 'password': password});
 
@@ -61,8 +60,12 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<http.Response> makeAuthenticatedRequest(
-      Uri url, String method, BuildContext context,
-      {Map<String, String>? headers, dynamic body}) async {
+    Uri url,
+    String method,
+    BuildContext context, {
+    Map<String, String>? headers,
+    dynamic body,
+  }) async {
     if (_token == null) {
       logout(context);
       throw Exception("Token is missing");
@@ -82,8 +85,11 @@ class AuthProvider with ChangeNotifier {
           response = await http.get(url, headers: effectiveHeaders);
           break;
         case 'POST':
-          response = await http.post(url,
-              headers: effectiveHeaders, body: jsonEncode(body));
+          response = await http.post(
+            url,
+            headers: effectiveHeaders,
+            body: jsonEncode(body),
+          );
           break;
         default:
           throw Exception("Unsupported HTTP method");

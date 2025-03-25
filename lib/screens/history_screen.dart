@@ -44,12 +44,11 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    );
-    _scaleAnimation =
-        Tween<double>(begin: 0.95, end: 1.0).animate(_fadeAnimation);
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _scaleAnimation = Tween<double>(
+      begin: 0.95,
+      end: 1.0,
+    ).animate(_fadeAnimation);
 
     _fetchOperations(page: _currentPage, period: _selectedPeriod);
   }
@@ -72,7 +71,7 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
 
     final token = context.read<AuthProvider>().token;
     final url = Uri.parse(
-      'https://exchanger-erbolsk.pythonanywhere.com/api/operations/?page=$page&period=$period',
+      'http://192.168.212.129:8000/api/operations/?page=$page&period=$period',
     );
     final headers = {
       'Content-Type': 'application/json',
@@ -152,8 +151,9 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                     ),
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   style: const TextStyle(color: Colors.white),
                 ),
                 const SizedBox(height: 12),
@@ -171,8 +171,9 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                     ),
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   style: const TextStyle(color: Colors.white),
                 ),
               ],
@@ -222,15 +223,15 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
   }) async {
     final token = context.read<AuthProvider>().token;
     if (token == null || token.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Not authenticated!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Not authenticated!')));
       return;
     }
 
     final opId = operation['id'];
     final editUrl = Uri.parse(
-      'https://exchanger-erbolsk.pythonanywhere.com/api/operations/$opId/edit_operation/',
+      'http://192.168.212.129:8000/api/operations/$opId/edit_operation/',
     );
     final headers = {
       'Content-Type': 'application/json',
@@ -240,10 +241,7 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
     final newAmount = double.tryParse(newAmountStr) ?? 0;
     final newRate = double.tryParse(newRateStr) ?? 0;
 
-    final body = jsonEncode({
-      "amount": newAmount,
-      "exchange_rate": newRate,
-    });
+    final body = jsonEncode({"amount": newAmount, "exchange_rate": newRate});
 
     try {
       final response = await http.patch(editUrl, headers: headers, body: body);
@@ -254,29 +252,29 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
         // Refresh
         _fetchOperations(page: _currentPage, period: _selectedPeriod);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Edit error: ${response.body}')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Edit error: ${response.body}')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Edit exception: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Edit exception: $e')));
     }
   }
 
   Future<void> _fetchAndShowReceipt(Map<String, dynamic> operation) async {
     final token = context.read<AuthProvider>().token;
     if (token == null || token.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Not authenticated!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Not authenticated!')));
       return;
     }
 
     final opId = operation['id'];
     final url = Uri.parse(
-      'https://exchanger-erbolsk.pythonanywhere.com/api/operations/$opId/generate_receipt_inline/',
+      'http://192.168.212.129:8000/api/operations/$opId/generate_receipt_inline/',
     );
     final headers = {
       'Content-Type': 'application/json',
@@ -293,8 +291,10 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) =>
-                  ReceiptViewerScreen(pdfBase64: pdfBase64, filename: filename),
+              builder: (_) => ReceiptViewerScreen(
+                pdfBase64: pdfBase64,
+                filename: filename,
+              ),
             ),
           );
         }
@@ -304,9 +304,9 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Receipt exception: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Receipt exception: $e')));
     }
   }
 
@@ -323,9 +323,7 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
     return Scaffold(
       body: Stack(
         children: [
-          const AnimatedBackground(
-            behaviour: null,
-          ),
+          const AnimatedBackground(behaviour: null),
           SafeArea(
             child: Column(
               children: [
@@ -354,8 +352,10 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
                         ),
                       ),
                       IconButton(
-                        icon:
-                            const Icon(Icons.exit_to_app, color: Colors.white),
+                        icon: const Icon(
+                          Icons.exit_to_app,
+                          color: Colors.white,
+                        ),
                         tooltip: 'Exit to Home',
                         onPressed: _exitToHome,
                       ),
@@ -376,7 +376,9 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
                                 child: Text(
                                   _errorMsg!,
                                   style: const TextStyle(
-                                      color: Colors.red, fontSize: 18),
+                                    color: Colors.red,
+                                    fontSize: 18,
+                                  ),
                                 ),
                               )
                             : Column(
@@ -396,7 +398,8 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
                                         );
                                       },
                                       child: _buildScrollableGrid(
-                                          key: ValueKey(_operations)),
+                                        key: ValueKey(_operations),
+                                      ),
                                     ),
                                   ),
                                   _buildPaginationRow(),
@@ -515,7 +518,10 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-              blurRadius: 4, color: Colors.black26, offset: const Offset(2, 2)),
+            blurRadius: 4,
+            color: Colors.black26,
+            offset: const Offset(2, 2),
+          ),
         ],
         border: Border.all(
           color: isBuy ? Colors.tealAccent : Colors.deepOrangeAccent,
@@ -557,9 +563,10 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
                   'Время: $timestamp',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 14,
-                      fontFamily: 'RobotoMono'),
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontFamily: 'RobotoMono',
+                  ),
                 ),
               ),
             ),
@@ -582,8 +589,10 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     elevation: 5,
                     shadowColor: Colors.indigo.shade300,
                   ),
@@ -591,8 +600,11 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
                 // Receipt Button
                 ElevatedButton.icon(
                   onPressed: () => _fetchAndShowReceipt(operation),
-                  icon: const Icon(Icons.receipt_long,
-                      color: Colors.white, size: 18),
+                  icon: const Icon(
+                    Icons.receipt_long,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                   label: const Text(
                     'Receipt',
                     style: TextStyle(
@@ -606,8 +618,10 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     elevation: 5,
                     shadowColor: Colors.deepOrange.shade300,
                   ),
@@ -640,10 +654,7 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             label: const Text(
               'Предыдущая',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'RobotoMono',
-              ),
+              style: TextStyle(color: Colors.white, fontFamily: 'RobotoMono'),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.indigo.shade600,
@@ -659,10 +670,11 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
           Text(
             'Страница $_currentPage',
             style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: 'RobotoMono'),
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: 'RobotoMono',
+            ),
           ),
           const SizedBox(width: 20),
           // Next Button
@@ -678,10 +690,7 @@ class _OperationsHistoryScreenState extends State<OperationsHistoryScreen>
             icon: const Icon(Icons.arrow_forward, color: Colors.white),
             label: const Text(
               'Следующая',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'RobotoMono',
-              ),
+              style: TextStyle(color: Colors.white, fontFamily: 'RobotoMono'),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.indigo.shade600,
@@ -736,13 +745,13 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
       final filePath = '${directory.path}/${widget.filename}';
       final file = File(filePath);
       await file.writeAsBytes(_pdfBytes);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Saved to: $filePath')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Saved to: $filePath')));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Save failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Save failed: $e')));
     } finally {
       setState(() {
         _isSaving = false;
@@ -761,7 +770,9 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
         title: Text(
           widget.filename,
           style: const TextStyle(
-              fontWeight: FontWeight.bold, fontFamily: 'RobotoMono'),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'RobotoMono',
+          ),
         ),
         backgroundColor: Colors.indigo.shade700,
         actions: [
@@ -790,8 +801,11 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
                           ),
                         ),
                       )
-                    : SfPdfViewer.memory(_pdfBytes,
-                        canShowScrollHead: true, canShowScrollStatus: true),
+                    : SfPdfViewer.memory(
+                        _pdfBytes,
+                        canShowScrollHead: true,
+                        canShowScrollStatus: true,
+                      ),
               ),
             ),
           ),
@@ -817,7 +831,9 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     elevation: 5,
                     shadowColor: Colors.red.shade300,
                   ),
@@ -830,8 +846,9 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
                           ),
                         )
                       : const Icon(Icons.download, color: Colors.white),
@@ -856,7 +873,9 @@ class _ReceiptViewerScreenState extends State<ReceiptViewerScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     elevation: 5,
                     shadowColor: Colors.indigo.shade300,
                   ),

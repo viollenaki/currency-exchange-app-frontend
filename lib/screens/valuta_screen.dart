@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-
-
 import 'package:currency_exchange_app/providers/auth_provider.dart';
 
 class ValutaScreen extends StatefulWidget {
@@ -18,7 +16,7 @@ class ValutaScreen extends StatefulWidget {
 class _ValutaScreenState extends State<ValutaScreen>
     with SingleTickerProviderStateMixin {
   bool _isLoading = false;
-  bool _isAdding = false; 
+  bool _isAdding = false;
   String? _errorMsg;
 
   List<Map<String, dynamic>> _currencies = [];
@@ -41,18 +39,16 @@ class _ValutaScreenState extends State<ValutaScreen>
     _color1Animation = ColorTween(
       begin: Colors.blue.shade800,
       end: Colors.pink.shade400,
-    ).animate(CurvedAnimation(
-      parent: _bgAnimationController,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(
+      CurvedAnimation(parent: _bgAnimationController, curve: Curves.easeInOut),
+    );
 
     _color2Animation = ColorTween(
       begin: Colors.purple.shade900,
       end: Colors.cyan.shade400,
-    ).animate(CurvedAnimation(
-      parent: _bgAnimationController,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(
+      CurvedAnimation(parent: _bgAnimationController, curve: Curves.easeInOut),
+    );
 
     _bgAnimationController.repeat(reverse: true);
 
@@ -138,20 +134,18 @@ class _ValutaScreenState extends State<ValutaScreen>
 
   Widget _buildCustomAppBar() {
     return AppBar(
-      backgroundColor: Colors.black, 
-      elevation: 0, 
+      backgroundColor: Colors.black,
+      elevation: 0,
       title: GradientText(
         'Управление Валютами',
-        gradient: const LinearGradient(
-          colors: [Colors.white, Colors.yellow],
-        ),
+        gradient: const LinearGradient(colors: [Colors.white, Colors.yellow]),
         style: const TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
           fontFamily: 'RobotoMono',
         ),
       ),
-      centerTitle: true, 
+      centerTitle: true,
       actions: [
         IconButton(
           icon: const Icon(Icons.exit_to_app, color: Colors.white, size: 28),
@@ -180,7 +174,6 @@ class _ValutaScreenState extends State<ValutaScreen>
           ),
         ),
         const SizedBox(height: 16),
-
         if (_errorMsg != null)
           Text(
             'Ошибка: $_errorMsg',
@@ -190,7 +183,6 @@ class _ValutaScreenState extends State<ValutaScreen>
               fontSize: 16,
             ),
           ),
-
         if (_isLoading)
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
@@ -198,7 +190,6 @@ class _ValutaScreenState extends State<ValutaScreen>
           )
         else
           _buildListView(),
-
         const SizedBox(height: 24),
         _buildAddCurrencyArea(),
       ],
@@ -221,10 +212,8 @@ class _ValutaScreenState extends State<ValutaScreen>
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: _currencies.length,
-      separatorBuilder: (_, __) => Divider(
-        color: Colors.grey.shade500,
-        height: 1,
-      ),
+      separatorBuilder: (_, __) =>
+          Divider(color: Colors.grey.shade500, height: 1),
       itemBuilder: (ctx, i) {
         final c = _currencies[i];
         final id = c['id'];
@@ -245,11 +234,7 @@ class _ValutaScreenState extends State<ValutaScreen>
             ),
           ),
           trailing: IconButton(
-            icon: const Icon(
-              Icons.delete,
-              color: Colors.redAccent,
-              size: 28,
-            ),
+            icon: const Icon(Icons.delete, color: Colors.redAccent, size: 28),
             onPressed: () {
               _confirmDelete(context, id, name);
             },
@@ -363,8 +348,7 @@ class _ValutaScreenState extends State<ValutaScreen>
 
     try {
       final token = context.read<AuthProvider>().token;
-      final url = Uri.parse(
-          'https://exchanger-erbolsk.pythonanywhere.com/api/currencies/');
+      final url = Uri.parse('http://192.168.212.129:8000/api/currencies/');
       final headers = {'Content-Type': 'application/json'};
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
@@ -374,7 +358,6 @@ class _ValutaScreenState extends State<ValutaScreen>
       if (resp.statusCode == 200) {
         final raw = jsonDecode(resp.body);
 
-       
         List<dynamic> results;
         if (raw is Map && raw.containsKey('results')) {
           results = raw['results'];
@@ -426,16 +409,13 @@ class _ValutaScreenState extends State<ValutaScreen>
 
     try {
       final token = context.read<AuthProvider>().token;
-      final url = Uri.parse(
-          'https://exchanger-erbolsk.pythonanywhere.com/api/currencies/');
+      final url = Uri.parse('http://192.168.212.129:8000/api/currencies/');
       final headers = {'Content-Type': 'application/json'};
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
       }
 
-      final body = jsonEncode({
-        "name": name,
-      });
+      final body = jsonEncode({"name": name});
 
       final resp = await http.post(url, headers: headers, body: body);
       if (resp.statusCode == 201) {
@@ -471,8 +451,7 @@ class _ValutaScreenState extends State<ValutaScreen>
 
     try {
       final token = context.read<AuthProvider>().token;
-      final url = Uri.parse(
-          'https://exchanger-erbolsk.pythonanywhere.com/api/currencies/$id/');
+      final url = Uri.parse('http://192.168.212.129:8000/api/currencies/$id/');
       final headers = {'Content-Type': 'application/json'};
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';

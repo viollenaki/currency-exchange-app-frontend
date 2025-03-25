@@ -1,0 +1,2 @@
+C:/Users/akbar/Desktop/currency-exchange-app-frontend/android/app/.cxx/Debug/394d1217/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/akbar/Desktop/currency-exchange-app-frontend/android/app/.cxx/Debug/394d1217/arm64-v8a/CMakeFiles/rebuild_cache.dir
